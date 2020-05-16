@@ -1,10 +1,11 @@
-# MetaClean: Detection of Low-Quality Peaks in Untargeted Metabolomics Data
-MetaClean is an R package for automatically detecting low-quality peaks in Untargeted Metabolomics data. It calculates 12 
-peak-quality metrics, adapted from metrics developed by Z and E, which are used to train up to nine diverse classification 
-algorithms. **[FINISH]**
+# **MetaClean**: Detection of Low-Quality Peaks in Untargeted LC-MS Metabolomics Data
+MetaClean utilizes 12 peak-quality metrics and 9 diverse machine learning algorithms to build a classifier to detect and flag low-quality peaks in untargeted metabolomics data. It is an R package and can be easily incorporated into existing untargeted
+LC-MS metabolomics pipelines that utilize the pre-processing software XCMS.
 
-For more information on the peak-quality metrics adapted by MetaClean, please refer to the original publications:
-**[add publications]**
+The 12 peak-quality metrics used by MetaClean are adapted from the following publications:\n
+Zhang, W., & Zhao, P. X. (2014). Quality evaluation of extracted ion chromatograms and chromatographic peaks in liquid chromatography/mass spectrometry-based metabolomics data. BMC Bioinformatics, 15(Suppl 11), S5. https://doi.org/10.1186/1471-2105-15-S11-S5 \n
+Eshghi, S. T., Auger, P., & Mathews, W. R. (2018). Quality assessment and interference detection in targeted mass spectrometry data using machine learning. Clinical Proteomics, 15. https://doi.org/10.1186/s12014-018-9209-x
+
 
 ## Installation
 To install MetaClean from this GitHub page, run the following command:
@@ -12,5 +13,8 @@ To install MetaClean from this GitHub page, run the following command:
 remotes::install_github("KelseyChetnik/MetaClean")
 ```
 
-Or install the latest stable CRAN version:
+Or install the latest stable CRAN version:\n
 *COMING SOON*
+
+## Usage
+Check out this [vignette](https://github.com/KelseyChetnik/MetaClean/blob/master/vignettes/MetaClean_WalkThrough.Rmd) for step-by-step instructions on how to use the MetaClean package.
