@@ -13,7 +13,7 @@ To install MetaClean from this GitHub page, run the following command:
 remotes::install_github("KelseyChetnik/MetaClean")
 ```
 
-Or install the latest stable CRAN version:\n
+Or install the latest stable CRAN version: <br />
 *COMING SOON*
 
 ## Usage
