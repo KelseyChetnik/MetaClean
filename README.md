@@ -8,9 +8,9 @@ For more information on the peak-quality metrics adapted by MetaClean, please re
 
 ## Installation
 To install MetaClean from this GitHub page, run the following command:
-'''
+```
 remotes::install_github("KelseyChetnik/MetaClean")
-'''
+```
 
 Or install the latest stable CRAN version:
 *COMING SOON*
