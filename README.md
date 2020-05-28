@@ -18,3 +18,6 @@ Or install the latest stable CRAN version: <br />
 
 ## Usage
 Check out this [vignette](https://github.com/KelseyChetnik/MetaClean/blob/master/vignettes/MetaClean_WalkThrough.Rmd) for step-by-step instructions on how to use the MetaClean package.
+
+## Description
+![](images/Fig3.png)
