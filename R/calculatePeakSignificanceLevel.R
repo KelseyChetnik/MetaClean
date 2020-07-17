@@ -11,6 +11,12 @@
 #' @param pts A 2D matrix containing the retention time and intensity values of a chromatographic peak
 #' @return The Peak Significance Level (double)
 #'
+#' @examples
+#' # Calculate Peak Significance for a peak
+#' data(ex_pts)
+#' data(ex_peakData)
+#' peakSignificance <- calculatePeakSignificanceLevel(peakData = ex_peakData, pts = ex_pts)
+#'
 #' @export
 
 calculatePeakSignificanceLevel <- function(peakData, pts){

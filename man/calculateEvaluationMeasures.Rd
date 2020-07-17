@@ -18,3 +18,8 @@ A dataframe with the following columns: Model, CVNum, RepNum, Accuracy, PassFSco
 \description{
 Calculate evaluation measures using the predictions generated during cross-validation.
 }
+\examples{
+# Calculate Evaluation Measures for test data
+\dontrun{test_evalMeasures <- calculateEvaluationMeasures(pred=test_predictions_class,
+pqMetrics_test$Class)}
+}

@@ -11,6 +11,12 @@
 #' @param pts A 2D matrix containing the retention time and intensity values of a chromatographic peak
 #' @return The Sharpness value (double)
 #'
+#' @examples
+#' # Calculate Sharpness for a peak
+#' data(ex_pts)
+#' data(ex_peakData)
+#' sharpness <- calculateSharpness(peakData = ex_peakData, pts = ex_pts)
+#'
 #' @export
 
 calculateSharpness <- function(peakData, pts){

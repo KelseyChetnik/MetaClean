@@ -11,6 +11,10 @@
 #'
 #' @import ggplot2
 #'
+#' @examples
+#' # Create a list of bar plots for each evaluation measure
+#' \donttest{makeBarPlots(evalMeasuresDF = test_evalMeasures)}
+#'
 #' @export
 
 makeBarPlots <- function(evalMeasuresDF, emNames = "All"){

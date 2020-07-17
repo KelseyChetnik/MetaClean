@@ -14,6 +14,10 @@
 #' @import caret
 #' @importFrom stats binomial
 #'
+#' @examples
+#' # train classification algorithms
+#' \donttest{models <- trainClassifiers(trainData=pqMetrics_development, k=5, repNum=10,
+#'  rand.seed = 453, models="DecisionTree")}
 #'
 #' @export
 

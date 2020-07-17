@@ -8,6 +8,10 @@
 #' @return A dataframe with the following columns: Model, RepNum, PosClass.FScore, PosClass.Recall, PosClass.Precision,
 #'  NegClass.FScore, NegClass.Recall, NegClass.Precision, Accuracy
 #'
+#' @examples
+#' # calculate all seven evaluation measures for each model and each round of cross-validation
+#' \donttest{evalMeasuresDF <- getEvaluationMeasures(models=models, k=5, repNum=10)}
+#'
 #' @export
 
 

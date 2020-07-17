@@ -10,6 +10,11 @@
 #' @return An Mx14 matrix where M is equal to the number of peaks. There are 14 columns in total, including one column for each of the twelve
 #' metrics, one column for EIC numbers, and one column for the class label.
 #'
+#' @examples
+#' # # calculate peak quality metrics for development dataset
+#' \donttest{pqMetrics_development <- getPeakQualityMetrics(eicEvalData = eicEval_development,
+#' eicLabels_df = eicLabels_development)}
+#'
 #' @export
 
 getPeakQualityMetrics <- function(eicEvalData, eicLabels_df, flatness.factor=0.05){

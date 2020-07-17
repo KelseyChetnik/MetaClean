@@ -4,12 +4,12 @@
 \alias{calculateRetentionTimeConsistency}
 \title{Calculate Retention Time Consistency (of a Peak Group)}
 \usage{
-calculateRetentionTimeConsistency(peakData, pts)
+calculateRetentionTimeConsistency(peakDataList, ptsList)
 }
 \arguments{
-\item{peakData}{A vector containing characteristic information about a chromatographic peak - including the retention time range}
+\item{peakDataList}{A list of vectors containing characteristic information about a chromatographic peak - including the retention time range}
 
-\item{pts}{A 2D matrix containing the retention time and intensity values of a chromatographic peak}
+\item{ptsList}{A list of 2D matrices containing the retention time and intensity values of a chromatographic peak}
 }
 \value{
 The Retention Time Consistency of a Peak Group (double)
@@ -23,4 +23,11 @@ time of all peak centers normalized by the mean time of all the peak centers.
 This function repurposed from TargetedMSQC. Toghi Eshghi, S., Auger, P., & Mathews, W. R. (2018). Quality assessment and
 interference detection in targeted mass spectrometry data using machine learning. Clinical Proteomics, 15.
 https://doi.org/10.1186/s12014-018-9209-x
+}
+\examples{
+# Calculate Retention Time Consistency for each peak
+data(ex_ptsList)
+data(ex_peakDataList)
+rtc <- calculateRetentionTimeConsistency(peakDataList = ex_peakDataList, ptsList = ex_ptsList)
+
 }

@@ -13,6 +13,12 @@
 #'
 #' @importFrom stats cor
 #'
+#' @examples
+#' # Calculate Symmetry for a peak
+#' data(ex_pts)
+#' data(ex_peakData)
+#' symmetry <- calculateSymmetry(peakData = ex_peakData, pts = ex_pts)
+#'
 #' @export
 
 calculateSymmetry <- function(peakData, pts){

@@ -14,6 +14,12 @@
 #' intensity is set to 0.
 #' @return The jaggedness of a chromatographic peak (double)
 #'
+#' @examples
+#' # Calculate Jaggedness for a peak
+#' data(ex_pts)
+#' data(ex_peakData)
+#' jaggedness <- calculateJaggedness(peakData = ex_peakData, pts = ex_pts)
+#'
 #' @export
 
 

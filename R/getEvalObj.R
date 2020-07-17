@@ -9,6 +9,10 @@
 #'
 #' @import xcms
 #'
+#' @examples
+#' # call getEvalObj on test data
+#' # \donttest{eicEval_test <- getEvalObj(xs = xs_test, fill = fill_test)}
+#'
 #' @export
 
 getEvalObj <- function(xs, fill){

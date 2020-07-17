@@ -18,3 +18,8 @@ An object of class evalObj
 This function extracts, formats, and combines the chromatographic peak data from the objects returned by the getEIC() and fillPeaks()
 functions from the XCMS package.
 }
+\examples{
+# call getEvalObj on test data
+# \dontrun{eicEval_test <- getEvalObj(xs = xs_test, fill = fill_test)}
+
+}

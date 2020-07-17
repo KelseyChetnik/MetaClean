@@ -27,3 +27,10 @@ This function repurposed from TargetedMSQC. Toghi Eshghi, S., Auger, P., & Mathe
 interference detection in targeted mass spectrometry data using machine learning. Clinical Proteomics, 15.
 https://doi.org/10.1186/s12014-018-9209-x
 }
+\examples{
+# Calculate Jaggedness for a peak
+data(ex_pts)
+data(ex_peakData)
+jaggedness <- calculateJaggedness(peakData = ex_peakData, pts = ex_pts)
+
+}

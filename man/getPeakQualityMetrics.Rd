@@ -22,3 +22,9 @@ metrics, one column for EIC numbers, and one column for the class label.
 \description{
 Wrapper function for calculating the each of the 12 peak quality metrics for each feature.
 }
+\examples{
+# # calculate peak quality metrics for development dataset
+\dontrun{pqMetrics_development <- getPeakQualityMetrics(eicEvalData = eicEval_development,
+eicLabels_df = eicLabels_development)}
+
+}

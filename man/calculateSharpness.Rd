@@ -23,3 +23,10 @@ This function repurposed from Zhang et al. For details, see Zhang, W., & Zhao, P
 ion chromatograms and chromatographic peaks in liquid chromatography/mass spectrometry-based metabolomics data. BMC Bioinformatics,
 15(Suppl 11), S5. https://doi.org/10.1186/1471-2105-15-S11-S5
 }
+\examples{
+# Calculate Sharpness for a peak
+data(ex_pts)
+data(ex_peakData)
+sharpness <- calculateSharpness(peakData = ex_peakData, pts = ex_pts)
+
+}

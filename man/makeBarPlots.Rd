@@ -20,3 +20,8 @@ A list of up to seven bar plots (one for each evaluation measure).
 \description{
 Wrapper function for generating bar plots for each classifiers for each of the seven evaluation measures.
 }
+\examples{
+# Create a list of bar plots for each evaluation measure
+\dontrun{makeBarPlots(evalMeasuresDF = test_evalMeasures)}
+
+}

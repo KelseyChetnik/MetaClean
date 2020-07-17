@@ -9,16 +9,25 @@
 #' interference detection in targeted mass spectrometry data using machine learning. Clinical Proteomics, 15.
 #' https://doi.org/10.1186/s12014-018-9209-x
 #'
-#' @param peakData A vector containing characteristic information about a chromatographic peak - including the retention time range
-#' @param pts A 2D matrix containing the retention time and intensity values of a chromatographic peak
+#' @param peakDataList A list of vectors containing characteristic information about a chromatographic peak - including the retention time range
+#' @param ptsList A list of 2D matrices containing the retention time and intensity values of a chromatographic peak
 #' @return The Elution Shift of a Peak Group (double)
 #'
 #' @importFrom stats median
 #'
+#' @examples
+#' # Calculate Elution Shift for each peak
+#' data(ex_ptsList)
+#' data(ex_peakDataList)
+#' elutionShift <- calculateElutionShift(peakDataList = ex_peakDataList, ptsList = ex_ptsList)
+#'
 #' @export
 
-calculateElutionShift <- function(peakData, pts){
+calculateElutionShift <- function(peakDataList, ptsList){
   # find the retention time corresponding to the peak apex (max intensity) for each sample in the group
+  pts <- ptsList
+  peakData <- peakDataList
+
   max_times <- sapply(1:length(pts), function(i){
     pd <- peakData[[i]]
     pt <- pts[[i]]

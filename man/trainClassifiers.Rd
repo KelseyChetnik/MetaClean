@@ -25,3 +25,9 @@ a list of up to 9 trained models
 \description{
 Wrapper function for training up to 9 classification algorithms using one of the two available metrics sets or both sets combined.
 }
+\examples{
+# train classification algorithms
+\dontrun{models <- trainClassifiers(trainData=pqMetrics_development, k=5, repNum=10,
+ rand.seed = 453, models="DecisionTree")}
+
+}

@@ -152,7 +152,8 @@ This matrix serves as the input for the training the classifiers and making pred
 - **k**: Number of folds to be used in cross-validation
 - **repNum**: Number of cross-validation rounds to perform
 - **rand.seed**: State in which to set the random number generator
-- **models**: A character string or vector specifying the models to use. Specifies the classification algorithms to be trained from the nine available: DecisionTree, LogisiticRegression, NaiveBayes, RandomForest, SVM_Linear, SVM_Radial, AdaBoost, NeuralNetwork, and ModelAveragedNeuralNetwork. "all" specifies the use of all models. Default is "all".
+- **models**: A character string or vector specifying the models to use. Specifies the classification algorithms to be trained from the nine available: DecisionTree, LogisiticRegression, NaiveBayes, RandomForest, SVM_Linear, SVM_Radial, AdaBoost, NeuralNetwork, and ModelAveragedNeuralNetwork. Use c() to select multiple models. "all" specifies the use of all models. Default is "all".
+- **metrics**: Determeines the metric set(s) to be run with the selected model(s). Select from the following: M5, M7, and M12. Use c() to select multiple metrics. "all" specifics the use of all metrics. Default is "M12".
 
 ```{r pqmTables}
 
@@ -169,7 +170,7 @@ data("pqMetrics_test")
 
 # train classification algorithms
 # For 500 peaks and 89 samples takes ~17.5 mins
-models <- trainClassifiers(trainData=pqMetrics_development, k=5, repNum=10, rand.seed = 453, models="all")
+#models <- trainClassifiers(trainData=pqMetrics_development, k=5, repNum=10, rand.seed = 453, models="all")
 
 
 ```
@@ -186,7 +187,7 @@ Once the potential models have been trained, the next step is to evaluate the pe
 ```{r getEvalMeasures}
 
 # calculate all seven evaluation measures for each model and each round of cross-validation
-evalMeasuresDF <- getEvaluationMeasures(models=models, k=5, repNum=10)
+#evalMeasuresDF <- getEvaluationMeasures(models=models, k=5, repNum=10)
 
 ```
 
@@ -203,11 +204,11 @@ NOTE: When "All" is selected for emNames, the bar plots are returned in the same
 ```{r makePlots}
 
 # generate bar plots for every
-barPlots <- makeBarPlots(evalMeasuresDF, emNames="All")
+#barPlots <- makeBarPlots(evalMeasuresDF, emNames="All")
 
-plot(barPlots[[1]]) # PASS.FScore
-plot(barPlots[[4]]) # FAIL.FScore
-plot(barPlots[[7]]) # Accuracy
+#plot(barPlots[[1]]) # PASS.FScore
+#plot(barPlots[[4]]) # FAIL.FScore
+#plot(barPlots[[7]]) # Accuracy
 
 ```
 
@@ -221,16 +222,16 @@ Once the best perfomring model has been selected, the user can train the algorit
 
 # best performing model for example development set, rand.seed = 453, k = 5, repNum = 10 is AdaBoost
 
-trainData <- pqMetrics_development[,-c(1)]
-trControl <- trainControl(method = "none", savePredictions = 'final', classProbs=TRUE)
+#trainData <- pqMetrics_development[,-c(1)]
+#trControl <- trainControl(method = "none", savePredictions = 'final', classProbs=TRUE)
 
-seed <- 453
-set.seed(seed)
-best_model <- train(Class~., trainData,
-                   method="adaboost",
-                   trControl=trControl,
-                   tuneGrid=data.frame(nIter=150, method="Adaboost.M1") # list hyperparameters optimized for the algorithm
-                   )
+#seed <- 453
+##set.seed(seed)
+#best_model <- train(Class~., trainData,
+#                   method="adaboost",
+#                   trControl=trControl,
+#                   tuneGrid=data.frame(nIter=150, method="Adaboost.M1") # list hyperparameters optimized for the algorithm
+#                   )
 
 ```
 
@@ -240,14 +241,14 @@ best_model <- train(Class~., trainData,
 The user can make predictions on new data using the final classifier using the predict() function from `caret` as demonstrated below:
 ```{r makePredictions}
 # return prediction probabilities for test dataset
-test_predictions_prob <- predict(best_model, pqMetrics_test[,-c(1)], type="prob")
+#test_predictions_prob <- predict(best_model, pqMetrics_test[,-c(1)], type="prob")
 # return class predictions for test dataset
-test_predictions_class <- predict(best_model, pqMetrics_test[,-c(1)])
+#test_predictions_class <- predict(best_model, pqMetrics_test[,-c(1)])
 
 
-test_predictions <- cbind("Probabilities"=test_predictions_prob, "Class"=test_predictions_class, "EICNO"=pqMetrics_test$EICNo)
+#test_predictions <- cbind("Probabilities"=test_predictions_prob, "Class"=test_predictions_class, "EICNO"=pqMetrics_test$EICNo)
 
-test_evalMeasures <- calculateEvaluationMeasures(pred=test_predictions_class, pqMetrics_test$Class)
+#test_evalMeasures <- calculateEvaluationMeasures(pred=test_predictions_class, pqMetrics_test$Class)
 
 ```
 

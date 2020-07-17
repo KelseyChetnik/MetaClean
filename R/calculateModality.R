@@ -17,6 +17,12 @@
 #' @importFrom utils head
 #' @importFrom utils tail
 #'
+#' @examples
+#' # Calculate Modality for a peak
+#' data(ex_pts)
+#' data(ex_peakData)
+#' modality <- calculateModality(peakData = ex_peakData, pts = ex_pts)
+#'
 #' @export
 
 calculateModality <- function(peakData, pts, flatness.factor = 0.05){

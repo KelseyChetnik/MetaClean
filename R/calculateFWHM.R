@@ -13,6 +13,12 @@
 #'
 #' @importFrom utils tail
 #'
+#' @examples
+#' # Calculate FWHM2Base for a peak
+#' data(ex_pts)
+#' data(ex_peakData)
+#' fwhm <- calculateFWHM(peakData=ex_peakData, pts=ex_pts)
+#'
 #' @export
 
 calculateFWHM <- function(peakData, pts){

@@ -13,6 +13,10 @@
 #'
 #' @importFrom plotrix std.error
 #'
+#' @examples
+#' \donttest{summaryStatsList <-  lapply(1:numModels, summaryStats,
+#' evalMeasuresDF=evalMeasuresDF, emNames=emNames, modelNames=modelNames)}
+#'
 #' @export
 
 

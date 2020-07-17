@@ -12,6 +12,12 @@
 #' @param pts A 2D matrix containing the retention time and intensity values of a chromatographic peak
 #' @return The TPASR value (double)
 #'
+#' @examples
+#' # Calculate TPASR for a peak
+#' data(ex_pts)
+#' data(ex_peakData)
+#' tpasr <- calculateTPASR(peakData = ex_peakData, pts = ex_pts)
+#'
 #' @export
 
 calculateTPASR <- function(peakData, pts){

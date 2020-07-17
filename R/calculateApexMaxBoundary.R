@@ -14,6 +14,12 @@
 #' @importFrom utils head
 #' @importFrom utils tail
 #'
+#' @examples
+#' # Calculate Apex Max-Boundary Ratio for a peak
+#' data(ex_pts)
+#' data(ex_peakData)
+#' apexMaxBoundary <- calculateApexMaxBoundaryRatio(peakData = ex_peakData, pts = ex_pts)
+#'
 #' @export
 
 calculateApexMaxBoundaryRatio <- function(peakData, pts){

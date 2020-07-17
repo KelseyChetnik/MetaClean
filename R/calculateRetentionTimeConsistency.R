@@ -8,13 +8,21 @@
 #' interference detection in targeted mass spectrometry data using machine learning. Clinical Proteomics, 15.
 #' https://doi.org/10.1186/s12014-018-9209-x
 #'
-#' @param peakData A vector containing characteristic information about a chromatographic peak - including the retention time range
-#' @param pts A 2D matrix containing the retention time and intensity values of a chromatographic peak
+#' @param peakDataList A list of vectors containing characteristic information about a chromatographic peak - including the retention time range
+#' @param ptsList A list of 2D matrices containing the retention time and intensity values of a chromatographic peak
 #' @return The Retention Time Consistency of a Peak Group (double)
+#'
+#' @examples
+#' # Calculate Retention Time Consistency for each peak
+#' data(ex_ptsList)
+#' data(ex_peakDataList)
+#' rtc <- calculateRetentionTimeConsistency(peakDataList = ex_peakDataList, ptsList = ex_ptsList)
 #'
 #' @export
 
-calculateRetentionTimeConsistency <- function(peakData, pts){
+calculateRetentionTimeConsistency <- function(peakDataList, ptsList){
+  peakData <- peakDataList
+  pts <- ptsList
   centers <- sapply(1:length(pts), function(i){
     pd <- peakData[[i]]
     pt <- pts[[i]]

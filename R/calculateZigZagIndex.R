@@ -11,6 +11,12 @@
 #' @param pts A 2D matrix containing the retention time and intensity values of a chromatographic peak
 #' @return The Zig-Zag Index value (double)
 #'
+#' @examples
+#' # Calculate ZigZag Index for a peak
+#' data(ex_pts)
+#' data(ex_peakData)
+#' zigZagIndex <- calculateZigZagIndex(peakData = ex_peakData, pts = ex_pts)
+#'
 #' @export
 
 

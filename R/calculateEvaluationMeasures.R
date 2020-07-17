@@ -13,6 +13,11 @@
 #' @importFrom MLmetrics Recall
 #' @importFrom MLmetrics F1_Score
 #' @importFrom MLmetrics Accuracy
+#'
+#' @examples
+#' # Calculate Evaluation Measures for test data
+#' \donttest{test_evalMeasures <- calculateEvaluationMeasures(pred=test_predictions_class,
+#' pqMetrics_test$Class)}
 
 calculateEvaluationMeasures <- function(pred, true){
   pred <- as.numeric(pred)

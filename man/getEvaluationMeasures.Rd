@@ -20,3 +20,8 @@ A dataframe with the following columns: Model, RepNum, PosClass.FScore, PosClass
 \description{
 Calculate evaluation measures using the predictions generated during cross-validation.
 }
+\examples{
+# calculate all seven evaluation measures for each model and each round of cross-validation
+\dontrun{evalMeasuresDF <- getEvaluationMeasures(models=models, k=5, repNum=10)}
+
+}

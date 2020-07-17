@@ -4,12 +4,12 @@
 \alias{calculateElutionShift}
 \title{Calculate Elution Shift (of a Peak Group)}
 \usage{
-calculateElutionShift(peakData, pts)
+calculateElutionShift(peakDataList, ptsList)
 }
 \arguments{
-\item{peakData}{A vector containing characteristic information about a chromatographic peak - including the retention time range}
+\item{peakDataList}{A list of vectors containing characteristic information about a chromatographic peak - including the retention time range}
 
-\item{pts}{A 2D matrix containing the retention time and intensity values of a chromatographic peak}
+\item{ptsList}{A list of 2D matrices containing the retention time and intensity values of a chromatographic peak}
 }
 \value{
 The Elution Shift of a Peak Group (double)
@@ -24,4 +24,11 @@ the Peak Group is equal to the mean of the Elution Shift of each chromatographic
 This function repurposed from TargetedMSQC. Toghi Eshghi, S., Auger, P., & Mathews, W. R. (2018). Quality assessment and
 interference detection in targeted mass spectrometry data using machine learning. Clinical Proteomics, 15.
 https://doi.org/10.1186/s12014-018-9209-x
+}
+\examples{
+# Calculate Elution Shift for each peak
+data(ex_ptsList)
+data(ex_peakDataList)
+elutionShift <- calculateElutionShift(peakDataList = ex_peakDataList, ptsList = ex_ptsList)
+
 }

@@ -1,33 +1,23 @@
 Package: MetaClean
-Title: MetaClean for the Automatic Detection of Low Quality Peaks in Untargeted Metabolomics Data
+Type: Package
+Title: Detection of Low-Quality Peaks in Untargeted Metabolomics Data
 Version: 0.1.0
 Author: Kelsey Chetnik
 Maintainer: Kelsey Chetnik <kchetnik73@gmail.com>
-Description: This package utilizes 12 peak quality metrics and 9 diverse machine learning algorithms to build a classifier for the automatic
+Description: Utilizes 12 peak quality metrics and 9 diverse machine learning algorithms to build a classifier for the automatic
   assessment of peak integration quality of peaks from untargeted metabolomics analyses.
-Depends: R (>= 3.5.0),
-         MLmetrics
-biocViews:
-    S4Vectors
-Imports:
-    BiocStyle,
-    xcms,
-    scmamp,
-    caret,
-    reshape2,
-    knitr,
-    ggplot2,
-    plotrix,
-    tools,
-    utils,
-    klaR,
-    fastAdaboost,
-    rpart,
-    randomForest,
-    kernlab,
-    methods
+  The 12 peak quality metrics were adapted from those defined in the following references:
+  Zhang, W., & Zhao, P.X. (2014) <doi:10.1186/1471-2105-15-S11-S5>
+  Toghi Eshghi, S., Auger, P., & Mathews, W.R. (2018) <doi:10.1186/s12014-018-9209-x>.
+biocViews: S4Vectors
+Imports: xcms, caret, reshape2, knitr, ggplot2, plotrix, tools, utils,
+        klaR, fastAdaboost, rpart, randomForest, kernlab, BiocStyle,
+        methods, graph, Rgraphviz
+Depends: R (>= 3.5.0), MLmetrics
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.0
 VignetteBuilder: knitr
+NeedsCompilation: no
+Packaged: 2020-05-19 15:10:59 UTC; User

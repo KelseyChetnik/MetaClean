@@ -16,6 +16,12 @@
 #' @importFrom stats nls
 #' @importFrom stats sd
 #'
+#' @examples
+#' # Calculate Gaussian Similarity for a peak
+#' data(ex_pts)
+#' data(ex_peakData)
+#' gaussianSimilarity <- calculateGaussianSimilarity(peakData = ex_peakData, pts = ex_pts)
+#'
 #' @export
 
 calculateGaussianSimilarity <- function(peakData, pts){
