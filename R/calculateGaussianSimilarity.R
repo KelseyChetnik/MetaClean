@@ -29,9 +29,8 @@ calculateGaussianSimilarity <- function(peakData, pts){
   ptsidx <- pts[, 1] >= peakrange[1] & pts[, 1] <= peakrange[2]
   intPts <- pts[ptsidx, ]
 
-  num_peak_pts <- length(intPts[,2])
-
   if(length(intPts) > 2){
+    num_peak_pts <- length(intPts[,2])
     td <- intPts[,1]
     d <- intPts[,2]
     mu <- peakData["rt"]

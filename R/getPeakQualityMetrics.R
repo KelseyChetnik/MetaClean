@@ -25,8 +25,8 @@ getPeakQualityMetrics <- function(eicEvalData, eicLabels_df, flatness.factor=0.0
   numCols = length(eicNums)
 
   # Apex-Boundary Raio
-  eic_abr_list <- lapply(1:numCols, function(i) mapply(calculateApexMaxBoundaryRatio,
-                                                       peakData=eicPeakData[[i]], pts=eicPts[[i]]))
+  eic_abr_list <- lapply(1:numCols, function(i) {mapply(calculateApexMaxBoundaryRatio,
+                                                       peakData=eicPeakData[[i]], pts=eicPts[[i]])})
   eic_abr_mean <- sapply(1:length(eic_abr_list), function(i){mean(eic_abr_list[[i]], na.rm=T)})
 
   # Elution Shift

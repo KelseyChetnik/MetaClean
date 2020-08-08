@@ -26,11 +26,15 @@ calculateApexMaxBoundaryRatio <- function(peakData, pts){
   peakrange <- peakData[c("rtmin", "rtmax")]
   ptsidx <- pts[, 1] >= peakrange[1] & pts[, 1] <= peakrange[2]
   intPts <- pts[ptsidx, ]
-  intensities <- intPts[,2]
+  if(length(intPts) > 2){
+    intensities <- intPts[,2]
 
-  r.max.intensity <- max(intensities, na.rm = T)
-  r.max.boundary.intensity <- max(c(head(intensities,1), tail(intensities,1)), na.rm = T)
-  r.apex.max.boundary.ratio <- r.max.boundary.intensity / r.max.intensity
+    r.max.intensity <- max(intensities, na.rm = T)
+    r.max.boundary.intensity <- max(c(head(intensities,1), tail(intensities,1)), na.rm = T)
+    r.apex.max.boundary.ratio <- r.max.boundary.intensity / r.max.intensity
+  }else{
+    r.apex.max.boundary.ratio <- NA
+  }
 
   return(r.apex.max.boundary.ratio)
 }

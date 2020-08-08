@@ -24,25 +24,29 @@ calculatePeakSignificanceLevel <- function(peakData, pts){
   ptsidx <- pts[, 1] >= peakrange[1] & pts[, 1] <= peakrange[2]
   intPts <- pts[ptsidx, ]
 
-  peak_intensity <- intPts[,2]
-  num_pk_pts <- length(peak_intensity)
+  if(length(intPts)>2){
+    peak_intensity <- intPts[,2]
+    num_pk_pts <- length(peak_intensity)
 
-  apex_intensity <- max(peak_intensity)
-  apex_index <- which(peak_intensity == apex_intensity)
-  if(length(apex_index) > 1){
-    apex_index <- apex_index[1]
-  }
+    apex_intensity <- max(peak_intensity)
+    apex_index <- which(peak_intensity == apex_intensity)
+    if(length(apex_index) > 1){
+      apex_index <- apex_index[1]
+    }
 
-  peak_level = apex_intensity
-  base_level = 0.0
+    peak_level = apex_intensity
+    base_level = 0.0
 
-  # get peak significance, peak level, and base level
-  if(apex_index != 1 & apex_index != num_pk_pts & num_pk_pts > 4){
-    sum1 = peak_intensity[1] + peak_intensity[2] + peak_intensity[num_pk_pts] + peak_intensity[num_pk_pts-1]
-    sum2 = peak_intensity[apex_index-1] + peak_intensity[apex_index] + peak_intensity[apex_index+1]
+    # get peak significance, peak level, and base level
+    if(apex_index != 1 & apex_index != num_pk_pts & num_pk_pts > 4){
+      sum1 = peak_intensity[1] + peak_intensity[2] + peak_intensity[num_pk_pts] + peak_intensity[num_pk_pts-1]
+      sum2 = peak_intensity[apex_index-1] + peak_intensity[apex_index] + peak_intensity[apex_index+1]
 
-    significance = sum2*4.0/(max(sum1, 0.01)*3.0)
+      significance = sum2*4.0/(max(sum1, 0.01)*3.0)
 
+    }else{
+      significance = NA
+    }
   }else{
     significance = NA
   }

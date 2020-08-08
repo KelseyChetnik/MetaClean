@@ -36,11 +36,15 @@ calculateElutionShift <- function(peakDataList, ptsList){
     ptsidx <- pt[, 1] >= peakrange[1] & pt[, 1] <= peakrange[2]
     intPts <- pt[ptsidx, ]
 
-    time <- intPts[,1]
-    intensities <- intPts[,2]
-    max_int <- max(intensities)
-    maxIdx <- which(intensities==max_int)[1]
-    max_time <- time[maxIdx]
+    if(length(intPts)>2){
+      time <- intPts[,1]
+      intensities <- intPts[,2]
+      max_int <- max(intensities)
+      maxIdx <- which(intensities==max_int)[1]
+      max_time <- time[maxIdx]
+    }else{
+      max_time <- NA
+    }
 
     return(max_time)
 
@@ -54,8 +58,12 @@ calculateElutionShift <- function(peakDataList, ptsList){
     ptsidx <- pt[, 1] >= peakrange[1] & pt[, 1] <= peakrange[2]
     intPts <- pt[ptsidx, ]
 
-    time <- intPts[,1]
-    peak_beg <- time[1]
+    if(length(intPts)>2){
+      time <- intPts[,1]
+      peak_beg <- time[1]
+    }else{
+      peak_beg <- NA
+    }
 
     return(peak_beg)
 
@@ -69,17 +77,21 @@ calculateElutionShift <- function(peakDataList, ptsList){
     ptsidx <- pt[, 1] >= peakrange[1] & pt[, 1] <= peakrange[2]
     intPts <- pt[ptsidx, ]
 
-    time <- intPts[,1]
-    peak_end <- time[length(time)]
+    if(length(intPts)>2){
+      time <- intPts[,1]
+      peak_end <- time[length(time)]
+    }else{
+      peak_end <- NA
+    }
 
     return(peak_end)
 
   })
 
-  peak_base <- mean(peak_ends) - mean(peak_begs)
-  med_max_time <- median(max_times)
+  peak_base <- mean(peak_ends,na.rm=T) - mean(peak_begs,na.rm=T)
+  med_max_time <- median(max_times, na.rm = T)
   time_diff_ratio <- abs(med_max_time - max_times) / peak_base
-  mean_shift_ratio <- mean(time_diff_ratio)
+  mean_shift_ratio <- mean(time_diff_ratio, na.rm=T)
 
   return(mean_shift_ratio)
 

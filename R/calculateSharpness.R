@@ -24,25 +24,30 @@ calculateSharpness <- function(peakData, pts){
   ptsidx <- pts[, 1] >= peakrange[1] & pts[, 1] <= peakrange[2]
   intPts <- pts[ptsidx, ]
 
-  peak_intensity <- intPts[,2]
-  num_pk_pts <- length(peak_intensity)
+  if(length(intPts)>2){
+    peak_intensity <- intPts[,2]
+    num_pk_pts <- length(peak_intensity)
 
-  sharpness = 0
-  apex_intensity <- max(peak_intensity)
-  apex_index <- which(peak_intensity == apex_intensity)
-  if(length(apex_index) > 1){
-    apex_index <- apex_index[1]
-  }
+    sharpness = 0
+    apex_intensity <- max(peak_intensity)
+    apex_index <- which(peak_intensity == apex_intensity)
+    if(length(apex_index) > 1){
+      apex_index <- apex_index[1]
+    }
 
-  if(num_pk_pts > 1){
-    for(i in 1:num_pk_pts){
-      if(i < apex_index){
-        sharpness = sharpness + (peak_intensity[i+1]-peak_intensity[i])/max(0.0001, peak_intensity[i])
-      }else if(i < num_pk_pts){
-        sharpness = sharpness + (peak_intensity[i]-peak_intensity[i+1])/max(0.0001, peak_intensity[i+1])
+    if(num_pk_pts > 1){
+      for(i in 1:num_pk_pts){
+        if(i < apex_index){
+          sharpness = sharpness + (peak_intensity[i+1]-peak_intensity[i])/max(0.0001, peak_intensity[i])
+        }else if(i < num_pk_pts){
+          sharpness = sharpness + (peak_intensity[i]-peak_intensity[i+1])/max(0.0001, peak_intensity[i+1])
+        }
       }
     }
+  }else{
+    sharpness <- NA
   }
+
   return(sharpness)
 
 }

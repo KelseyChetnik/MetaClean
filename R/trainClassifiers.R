@@ -7,8 +7,11 @@
 #' @param repNum integer. Number of cross-validation rounds to perform
 #' @param rand.seed integer. State in which to set the random number generator
 #' @param models character string or vector. Specifies the classification algorithms to be trained from the nine available:
-#'  DecisionTree, LogisiticRegression, NaiveBayes, RandomForest, SVM_Linear, SVM_Radial, AdaBoost, NeuralNetwork, and
-#'  ModelAveragedNeuralNetwork. "all" specifies the use of all models. Default is "all".
+#'     DecisionTree, LogisiticRegression, NaiveBayes, RandomForest, SVM_Linear, SVM_Radial, AdaBoost, NeuralNetwork, and
+#'     ModelAveragedNeuralNetwork. "all" specifies the use of all models. Default is "all".
+#' @param metricSet The metric set(s) to be run with the selected model(s). Select from the following: M5, M7, and M12. Use c()
+#'     to select multiple metrics. "all" specifics the use of all metrics. Default is "M12".
+#'
 #' @return a list of up to 9 trained models
 #'
 #' @import caret
@@ -22,7 +25,7 @@
 #' @export
 
 
-trainClassifiers <- function(trainData, k, repNum, rand.seed=NULL, models="all"){
+trainClassifiers <- function(trainData, k, repNum, rand.seed=NULL, models="all", metricSet="M12"){
 
   # remove EICNo column if present
   if("EICNo" %in% colnames(trainData)){
@@ -41,6 +44,12 @@ trainClassifiers <- function(trainData, k, repNum, rand.seed=NULL, models="all")
          Sharpness_mean, TPASR_mean, ZigZag_mean, Class")
   }
 
+  # check metricSet names are valid
+  metricSetNames <- c("M5", "M7", "M12")
+  if(any(metricSet %in% metricSetNames == F)){
+    stop("Unrecognized Metric Set Names! Only the following metric set names are allowed:\n M5, M7, M12")
+  }
+
   # check model names are valid
   modelNames <- c("DecisionTree","LogisticRegression", "NaiveBayes", "RandomForest", "SVM_Linear", "SVM_Radial", "AdaBoost",
                   "NeuralNetwork", "ModelAveragedNeuralNet")
@@ -54,163 +63,178 @@ trainClassifiers <- function(trainData, k, repNum, rand.seed=NULL, models="all")
     }
   }
 
+  metModels <- apply(expand.grid(models, metricSet), 1, paste, collapse="_")
+  holdData <- trainData
+
+  # metric to use for parameter optimization
   metric = "Accuracy"
-
-  if(!is.null(rand.seed)){
-    seed = rand.seed
-    set.seed(seed)
-  }
-  cv_folds <- createMultiFolds(trainData$Class, k = k, times=repNum)
-  trControl <- trainControl(method = "repeatedcv", number = k, repeats = repNum, index = cv_folds, savePredictions = 'final', classProbs=TRUE)
-
-  trainClass <- trainData$Class
-  classIdx <- match("Class", colnames(trainData))
-  #trainData <- trainData[,-classIdx]
-
-  modelList <- list()
 
   ### ------------------------------------------------ TRAIN CLASSIFIERS ------------------------------------------------ ###
 
-  # Decision Tree
-  if("DecisionTree" %in% models){
-    m_idx <- match("DecisionTree", models)
-    if(!is.null(rand.seed)){
-      set.seed(seed)
-    }
-    dt_model <- train(x=trainData[,-classIdx],
-                      y=trainData$Class,
-                      method = "rpart",
-                      trControl = trControl,
-                      metric = metric,
-                      control=list(maxit=1000))
-    modelList[[m_idx]] <- list(dt_model, "DecisionTree")
-  }
+  modelList <- list()
+  m_idx <- 1
+  for(mm in  metModels){
+    trainData <- holdData
 
-  # Logistic Regression
-  if("LogisticRegression" %in% models){
-    m_idx <- match("LogisticRegression", models)
-    if(!is.null(rand.seed)){
-      set.seed(seed)
+    if(endsWith(mm, "_M5")){
+      mCols <-c("GaussianSimilarity_mean", "PeakSignificance_mean", "Sharpness_mean", "TPASR_mean", "ZigZag_mean")
+    }else if(endsWith(mm, "_M7")){
+      mCols <- c("ApexBoundaryRatio_mean", "ElutionShift_mean", "FWHM2Base_mean", "Jaggedness_mean", "Modality_mean",
+                 "RetentionTimeCorrelation_mean", "Symmetry_mean")
+    }else{
+      mCols <- c("ApexBoundaryRatio_mean", "ElutionShift_mean", "FWHM2Base_mean", "Jaggedness_mean", "Modality_mean",
+                 "RetentionTimeCorrelation_mean", "Symmetry_mean", "GaussianSimilarity_mean", "PeakSignificance_mean",
+                 "Sharpness_mean", "TPASR_mean", "ZigZag_mean")
     }
-    lr_model <- train(x=trainData[,-classIdx],
-                      y=trainData$Class,
-                      method = "glm",
-                      trControl = trControl,
-                      metric = metric,
-                      family = binomial(),
-                      control=list(maxit=1000))
-  modelList[[m_idx]] <- list(lr_model, "LogisticRegression")
-  }
 
-  # Naive Bayes
-  if("NaiveBayes" %in% models){
-    m_idx <- match("NaiveBayes", models)
-    if(!is.null(rand.seed)){
-      set.seed(seed)
-    }
-    suppressWarnings(nb_model <- train(x=trainData[,-classIdx],
-                                       y=trainData$Class,
-                      method = "nb",
-                      trControl = trControl,
-                      metric = metric,
-                      trace=FALSE
-    ))
-    modelList[[m_idx]] <- list(nb_model, "NaiveBayes")
-  }
+    trainData <- trainData[,c(mCols, "Class")]
 
-  # Random Forest
-  if("RandomForest" %in% models){
-    m_idx <- match("RandomForest", models)
     if(!is.null(rand.seed)){
+      seed = rand.seed
       set.seed(seed)
     }
-    system.time(rf_model <- train(x=trainData[,-classIdx],
-                                   y=trainData$Class,
-                                  method = "rf",
-                                  trControl = trControl,
-                                  metric = metric,
-                                  control=list(maxit=1000)))
-    modelList[[m_idx]] <- list(rf_model, "RandomForest")
-  }
+    cv_folds <- createMultiFolds(trainData$Class, k = k, times=repNum)
+    trControl <- trainControl(method = "repeatedcv", number = k, repeats = repNum, index = cv_folds, savePredictions = 'final', classProbs=TRUE)
 
-  # SVM Linear Kernel
-  if("SVM_Linear" %in% models){
-    m_idx <- match("SVM_Linear", models)
-    if(!is.null(rand.seed)){
-      set.seed(seed)
-    }
-    lsvm_model <- train(x=trainData[,-classIdx],
+    trainClass <- trainData$Class
+    classIdx <- match("Class", colnames(trainData))
+    #trainData <- trainData[,-classIdx]
+
+    # Decision Tree
+    if(startsWith(mm, "DecisionTree")){
+      if(!is.null(rand.seed)){
+        set.seed(seed)
+      }
+      dt_model <- train(x=trainData[,-classIdx],
                         y=trainData$Class,
-                        method = "svmLinear",
-                        trControl = trControl,
-                        metric = metric,
-                        #tuneGrid = tunegrid,
-                        control=list(maxit=1000))
-    modelList[[m_idx]] <- list(lsvm_model, "SVM_Linear")
-  }
-
-  # SVM Radial Kernel
-  if("SVM_Radial" %in% models){
-    m_idx <- match("SVM_Radial", models)
-    if(!is.null(rand.seed)){
-      set.seed(seed)
-    }
-    rsvm_model <- train(x=trainData[,-classIdx],
-                        y=trainData$Class,
-                        method = "svmRadial",
+                        method = "rpart",
                         trControl = trControl,
                         metric = metric,
                         control=list(maxit=1000))
-    modelList[[m_idx]] <- list(rsvm_model, "SVM_Radial")
-  }
-
-  # AdaBoost
-  if("AdaBoost" %in% models){
-    m_idx <- match("AdaBoost", models)
-    if(!is.null(rand.seed)){
-      set.seed(seed)
+      modelList[[m_idx]] <- list(dt_model, mm)
     }
-    system.time(ada_model <-  train(x=trainData[,-classIdx],
+
+    # Logistic Regression
+    if(startsWith(mm, "LogisticRegression")){
+      if(!is.null(rand.seed)){
+        set.seed(seed)
+      }
+      lr_model <- train(x=trainData[,-classIdx],
+                        y=trainData$Class,
+                        method = "glm",
+                        trControl = trControl,
+                        metric = metric,
+                        family = binomial(),
+                        control=list(maxit=1000))
+      modelList[[m_idx]] <- list(lr_model, mm)
+    }
+
+    # Naive Bayes
+    if(startsWith(mm, "NaiveBayes")){
+      if(!is.null(rand.seed)){
+        set.seed(seed)
+      }
+      suppressWarnings(nb_model <- train(x=trainData[,-classIdx],
+                                         y=trainData$Class,
+                                         method = "nb",
+                                         trControl = trControl,
+                                         metric = metric,
+                                         trace=FALSE
+      ))
+      modelList[[m_idx]] <- list(nb_model, mm)
+    }
+
+    # Random Forest
+    if(startsWith(mm, "RandomForest")){
+      if(!is.null(rand.seed)){
+        set.seed(seed)
+      }
+      system.time(rf_model <- train(x=trainData[,-classIdx],
                                     y=trainData$Class,
-                                    method = "adaboost",
+                                    method = "rf",
                                     trControl = trControl,
                                     metric = metric,
                                     control=list(maxit=1000)))
-    modelList[[m_idx]] <- list(ada_model, "AdaBoost")
-  }
-
-
-  # Neural Network
-  if("NeuralNetwork" %in% models){
-    m_idx <- match("NeuralNetwork", models)
-    if(!is.null(rand.seed)){
-      set.seed(seed)
+      modelList[[m_idx]] <- list(rf_model, mm)
     }
-    system.time(nn_model <-  train(x=trainData[,-classIdx],
-                                   y=trainData$Class,
-                                   method = "nnet",
-                                   trControl = trControl,
-                                   metric = metric,
-                                   control=list(maxit=1000),
-                                   trace=FALSE))
-    modelList[[m_idx]] <- list(nn_model, "NeuralNetwork")
-  }
 
-  # Model Average Neural Network
-  if("ModelAveragedNeuralNet" %in% models){
-    m_idx <- match("ModelAveragedNeuralNet", models)
-    if(!is.null(rand.seed)){
-      set.seed(seed)
+    # SVM Linear Kernel
+    if(startsWith(mm, "SVM_Linear")){
+      if(!is.null(rand.seed)){
+        set.seed(seed)
+      }
+      lsvm_model <- train(x=trainData[,-classIdx],
+                          y=trainData$Class,
+                          method = "svmLinear",
+                          trControl = trControl,
+                          metric = metric,
+                          #tuneGrid = tunegrid,
+                          control=list(maxit=1000))
+      modelList[[m_idx]] <- list(lsvm_model, mm)
     }
-    suppressMessages(avNN_model <-  train(x=trainData[,-classIdx],
-                                          y=trainData$Class,
-                                         method = "avNNet",
-                                         trControl = trControl,
-                                         metric = metric,
-                                         control=list(maxit=1000),
-                                         trace=FALSE))
-    modelList[[m_idx]] <- list(avNN_model, "ModelAveragedNeuralNet")
-  }
+
+    # SVM Radial Kernel
+    if(startsWith(mm, "SVM_Radial")){
+      if(!is.null(rand.seed)){
+        set.seed(seed)
+      }
+      rsvm_model <- train(x=trainData[,-classIdx],
+                          y=trainData$Class,
+                          method = "svmRadial",
+                          trControl = trControl,
+                          metric = metric,
+                          control=list(maxit=1000))
+      modelList[[m_idx]] <- list(rsvm_model, mm)
+    }
+
+    # AdaBoost
+    if(startsWith(mm, "AdaBoost")){
+      if(!is.null(rand.seed)){
+        set.seed(seed)
+      }
+      system.time(ada_model <-  train(x=trainData[,-classIdx],
+                                      y=trainData$Class,
+                                      method = "adaboost",
+                                      trControl = trControl,
+                                      metric = metric,
+                                      control=list(maxit=1000)))
+      modelList[[m_idx]] <- list(ada_model, mm)
+    }
+
+
+    # Neural Network
+    if(startsWith(mm, "NeuralNetwork")){
+      if(!is.null(rand.seed)){
+        set.seed(seed)
+      }
+      system.time(nn_model <-  train(x=trainData[,-classIdx],
+                                     y=trainData$Class,
+                                     method = "nnet",
+                                     trControl = trControl,
+                                     metric = metric,
+                                     control=list(maxit=1000),
+                                     trace=FALSE))
+      modelList[[m_idx]] <- list(nn_model, mm)
+    }
+
+    # Model Average Neural Network
+    if(startsWith(mm, "ModelAveragedNeuralNet")){
+      if(!is.null(rand.seed)){
+        set.seed(seed)
+      }
+      suppressMessages(avNN_model <-  train(x=trainData[,-classIdx],
+                                            y=trainData$Class,
+                                            method = "avNNet",
+                                            trControl = trControl,
+                                            metric = metric,
+                                            control=list(maxit=1000),
+                                            trace=FALSE))
+      modelList[[m_idx]] <- list(avNN_model, mm)
+    }
+
+    m_idx = m_idx + 1
+  } # end metric sets loop
+
 
   return(modelList)
 

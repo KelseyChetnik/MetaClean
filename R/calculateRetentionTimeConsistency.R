@@ -30,19 +30,23 @@ calculateRetentionTimeConsistency <- function(peakDataList, ptsList){
     ptsidx <- pt[, 1] >= peakrange[1] & pt[, 1] <= peakrange[2]
     intPts <- pt[ptsidx, ]
 
-    time <- intPts[,1]
-    time_len <- length(time)
-    t_end <- time[time_len]
-    t_beg <- time[1]
-    center_time <- round(t_end - (abs(t_end-t_beg)/2),4)
+    if(length(intPts)>2){
+      time <- intPts[,1]
+      time_len <- length(time)
+      t_end <- time[time_len]
+      t_beg <- time[1]
+      center_time <- round(t_end - (abs(t_end-t_beg)/2),4)
+    }else{
+      center_time <- NA
+    }
 
     return(center_time)
   })
 
-  mean_center <- mean(centers)
+  mean_center <- mean(centers, na.rm=T)
 
   rt_diff <- abs(centers - mean_center) / mean_center
-  rt_consistency <- mean(rt_diff)
+  rt_consistency <- mean(rt_diff, na.rm=T)
 
   return(rt_consistency)
 }

@@ -30,27 +30,31 @@ calculateModality <- function(peakData, pts, flatness.factor = 0.05){
   ptsidx <- pts[, 1] >= peakrange[1] & pts[, 1] <= peakrange[2]
   intPts <- pts[ptsidx, ]
 
-  time <- intPts[,1]
-  intensities <- intPts[,2]
+  if(length(intPts)>2){
+    time <- intPts[,1]
+    intensities <- intPts[,2]
 
-  diff.sig <- diff(intensities)
-  diff.sig[which(abs(diff.sig) < flatness.factor * max(abs(intensities)))] <- 0
-  first.fall <- head(which(diff.sig < 0), 1)
-  last.rise <- tail(which(diff.sig > 0), 1)
-  if (length(first.fall) == 0)
-    first.fall <- length(time) + 1
-  if (length(last.rise) == 0)
-    last.rise <- -1
-  max.dip <- 0
-  if (!is.na(first.fall) & !is.na(last.rise) & first.fall <
-      last.rise) {
-    max.dip <- max(abs(diff.sig[first.fall:last.rise]))
-  }
-  if (max(intensities) == 0) {
-    modality <- 0
-  }
-  else {
-    modality <- max.dip/max(intensities)
+    diff.sig <- diff(intensities)
+    diff.sig[which(abs(diff.sig) < flatness.factor * max(abs(intensities)))] <- 0
+    first.fall <- head(which(diff.sig < 0), 1)
+    last.rise <- tail(which(diff.sig > 0), 1)
+    if (length(first.fall) == 0)
+      first.fall <- length(time) + 1
+    if (length(last.rise) == 0)
+      last.rise <- -1
+    max.dip <- 0
+    if (!is.na(first.fall) & !is.na(last.rise) & first.fall <
+        last.rise) {
+      max.dip <- max(abs(diff.sig[first.fall:last.rise]))
+    }
+    if (max(intensities) == 0) {
+      modality <- 0
+    }
+    else {
+      modality <- max.dip/max(intensities)
+    }
+  }else{
+    modality <- NA
   }
 
   return(modality)

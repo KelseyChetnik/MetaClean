@@ -25,17 +25,21 @@ calculateZigZagIndex <- function(peakData, pts){
   ptsidx <- pts[, 1] >= peakrange[1] & pts[, 1] <= peakrange[2]
   intPts <- pts[ptsidx, ]
 
-  eic <- intPts[,2]
+  if(length(intPts)>4){
+    eic <- intPts[,2]
 
-  end <- length(eic)
-  EPI=max(eic)-(eic[1]+eic[2]+eic[end]+eic[end-1])/4.0;
+    end <- length(eic)
+    EPI=max(eic)-(eic[1]+eic[2]+eic[end]+eic[end-1])/4.0;
 
-  zig_zag_sum=0.0
-  for(i in 2:(end-1)){
-    local_zig_zag=(2*eic[i]-eic[i-1]-eic[i+1])^2.0
-    zig_zag_sum=zig_zag_sum+local_zig_zag
+    zig_zag_sum=0.0
+    for(i in 2:(end-1)){
+      local_zig_zag=(2*eic[i]-eic[i-1]-eic[i+1])^2.0
+      zig_zag_sum=zig_zag_sum+local_zig_zag
+    }
+
+    zig_zag_index = zig_zag_sum/(EPI^2.0*end)
+  }else{
+    zig_zag_index <- NA
   }
-
-  zig_zag_index = zig_zag_sum/(EPI^2.0*end)
   return(zig_zag_index)
 }

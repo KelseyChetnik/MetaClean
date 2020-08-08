@@ -25,11 +25,18 @@ calculateSymmetry <- function(peakData, pts){
   peakrange <- peakData[c("rtmin", "rtmax")]
   ptsidx <- pts[, 1] >= peakrange[1] & pts[, 1] <= peakrange[2]
   intPts <- pts[ptsidx, ]
-  intensities <- intPts[,2]
 
-  left <- intensities[1:floor(length(intensities)/2)]
-  right <- intensities[seq(length(intensities), length(intensities) + 1 - floor(length(intensities)/2), by=-1)]
-  symmetry <- cor(left,right,method = "pearson")
+  if(length(intPts)>2){
+    intensities <- intPts[,2]
+
+    left <- intensities[1:floor(length(intensities)/2)]
+    right <- intensities[seq(length(intensities), length(intensities) + 1 - floor(length(intensities)/2), by=-1)]
+    symmetry <- cor(left,right,method = "pearson")
+  }else{
+    symmetry <- NA
+  }
+
+
   return(symmetry)
 
 }

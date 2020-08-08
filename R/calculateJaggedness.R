@@ -29,13 +29,19 @@ calculateJaggedness <- function(peakData, pts, flatness.factor=0.05){
   peakrange <- peakData[c("rtmin", "rtmax")]
   ptsidx <- pts[, 1] >= peakrange[1] & pts[, 1] <= peakrange[2]
   intPts <- pts[ptsidx, ]
-  intensities <- intPts[,2]
 
-  diff.int <- diff(intensities)
-  diff.int[which(abs(diff.int) < flatness.factor * max(abs(intensities)))] = 0
-  jaggedness <- (sum(abs(diff(sign(diff.int))) > 1) - 1)/(length(diff.int) -
-                                                            1)
-  jaggedness <- max(0, jaggedness)
-  return(round(jaggedness, digits = 4))
+  if(length(intPts)>2){
+    intensities <- intPts[,2]
+
+    diff.int <- diff(intensities)
+    diff.int[which(abs(diff.int) < flatness.factor * max(abs(intensities)))] = 0
+    jaggedness <- (sum(abs(diff(sign(diff.int))) > 1) - 1)/(length(diff.int) -
+                                                              1)
+    jaggedness <- round(max(0, jaggedness),digits=4)
+  }else{
+    jaggedness <- NA
+  }
+
+  return(jaggedness)
 
 }
