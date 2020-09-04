@@ -20,6 +20,6 @@ functions from the XCMS package.
 }
 \examples{
 # call getEvalObj on test data
-# \dontrun{eicEval_test <- getEvalObj(xs = xs_test, fill = fill_test)}
+# \donttest{eicEval_test <- getEvalObj(xs = xs_test, fill = fill_test)}
 
 }

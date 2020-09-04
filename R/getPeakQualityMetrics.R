@@ -68,11 +68,6 @@ getPeakQualityMetrics <- function(eicEvalData, eicLabels_df, flatness.factor=0.0
                                        peakData=eicPeakData[[i]], pts=eicPts[[i]]))
   eic_gaussian_mean <- sapply(1:length(eic_gaussian_list), function(i){mean(eic_gaussian_list[[i]], na.rm=T)})
 
-  # Peak Signficance Level
-  eic_significance_list <- suppressWarnings(lapply(1:numCols, function(i) mapply(calculatePeakSignificanceLevel,
-                                                                peakData=eicPeakData[[i]], pts=eicPts[[i]])))
-  eic_significance_mean <- sapply(1:length(eic_significance_list), function(i){mean(eic_significance_list[[i]], na.rm=T)})
-
   # Sharpness
   eic_sharpness_list <- suppressWarnings(lapply(1:numCols, function(i) mapply(calculateSharpness,
                                                              peakData=eicPeakData[[i]], pts=eicPts[[i]])))

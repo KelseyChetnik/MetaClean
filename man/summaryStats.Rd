@@ -25,7 +25,7 @@ A dataframe with the following columns: Model, evalMeasure, Mean, and SE (Standa
 For repeated cross-validation, find the mean and standard error of N rounds for each model.
 }
 \examples{
-\dontrun{summaryStatsList <-  lapply(1:numModels, summaryStats,
+\donttest{summaryStatsList <-  lapply(1:numModels, summaryStats,
 evalMeasuresDF=evalMeasuresDF, emNames=emNames, modelNames=modelNames)}
 
 }

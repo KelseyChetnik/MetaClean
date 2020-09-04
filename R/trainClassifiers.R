@@ -1,18 +1,18 @@
 #' Train Classifiers on Peak Quality Metric Feature Sets
 #'
-#' Wrapper function for training up to 9 classification algorithms using one of the two available metrics sets or both sets combined.
+#' Wrapper function for training up to 8 classification algorithms using one of the two available metrics sets or both sets combined.
 #'
 #' @param trainData dataframe. Rows should correspond to peaks, columns should include peak quality metrics and class labels only.
 #' @param k integer. Number of folds to be used in cross-validation
 #' @param repNum integer. Number of cross-validation rounds to perform
 #' @param rand.seed integer. State in which to set the random number generator
-#' @param models character string or vector. Specifies the classification algorithms to be trained from the nine available:
-#'     DecisionTree, LogisiticRegression, NaiveBayes, RandomForest, SVM_Linear, SVM_Radial, AdaBoost, NeuralNetwork, and
+#' @param models character string or vector. Specifies the classification algorithms to be trained from the eight available:
+#'     DecisionTree, LogisiticRegression, NaiveBayes, RandomForest, SVM_Linear, AdaBoost, NeuralNetwork, and
 #'     ModelAveragedNeuralNetwork. "all" specifies the use of all models. Default is "all".
-#' @param metricSet The metric set(s) to be run with the selected model(s). Select from the following: M5, M7, and M12. Use c()
-#'     to select multiple metrics. "all" specifics the use of all metrics. Default is "M12".
+#' @param metricSet The metric set(s) to be run with the selected model(s). Select from the following: M4, M7, and M11. Use c()
+#'     to select multiple metrics. "all" specifics the use of all metrics. Default is "M11".
 #'
-#' @return a list of up to 9 trained models
+#' @return a list of up to 8 trained models
 #'
 #' @import caret
 #' @importFrom stats binomial
@@ -25,7 +25,7 @@
 #' @export
 
 
-trainClassifiers <- function(trainData, k, repNum, rand.seed=NULL, models="all", metricSet="M12"){
+trainClassifiers <- function(trainData, k, repNum, rand.seed=NULL, models="all", metricSet="M11"){
 
   # remove EICNo column if present
   if("EICNo" %in% colnames(trainData)){
@@ -35,23 +35,23 @@ trainClassifiers <- function(trainData, k, repNum, rand.seed=NULL, models="all",
 
   # check only Peak Quality Metrics and Class columns present
   reqCols <- c("ApexBoundaryRatio_mean", "ElutionShift_mean", "FWHM2Base_mean", "Jaggedness_mean", "Modality_mean",
-               "RetentionTimeCorrelation_mean", "Symmetry_mean", "GaussianSimilarity_mean", "PeakSignificance_mean",
+               "RetentionTimeCorrelation_mean", "Symmetry_mean", "GaussianSimilarity_mean",
                "Sharpness_mean", "TPASR_mean", "ZigZag_mean", "Class")
   if(any(colnames(trainData) %in% reqCols==FALSE)){
     stop("Unrecognized Column Names! Only the following column names are allowed:
          ApexBoundaryRatio_mean, ElutionShift_mean, FWHM2Base_mean, Jaggedness_mean, Modality_mean,
-         RetentionTimeCorrelation_mean, Symmetry_mean, GaussianSimilarity_mean, PeakSignificanceLevel_mean,
+         RetentionTimeCorrelation_mean, Symmetry_mean, GaussianSimilarity_mean,
          Sharpness_mean, TPASR_mean, ZigZag_mean, Class")
   }
 
   # check metricSet names are valid
-  metricSetNames <- c("M5", "M7", "M12")
+  metricSetNames <- c("M4", "M7", "M11")
   if(any(metricSet %in% metricSetNames == F)){
-    stop("Unrecognized Metric Set Names! Only the following metric set names are allowed:\n M5, M7, M12")
+    stop("Unrecognized Metric Set Names! Only the following metric set names are allowed:\n M4, M7, M11")
   }
 
   # check model names are valid
-  modelNames <- c("DecisionTree","LogisticRegression", "NaiveBayes", "RandomForest", "SVM_Linear", "SVM_Radial", "AdaBoost",
+  modelNames <- c("DecisionTree","LogisticRegression", "NaiveBayes", "RandomForest", "SVM_Linear", "AdaBoost",
                   "NeuralNetwork", "ModelAveragedNeuralNet")
   if(tolower(models)=="all"){
     models <- modelNames
@@ -59,7 +59,7 @@ trainClassifiers <- function(trainData, k, repNum, rand.seed=NULL, models="all",
     if(any(models %in% modelNames==FALSE)){
       stop("Unrecognized Model Names! Only the following model names are allowed:
            DecisionTree, LogisticRegression, NaiveBayes, RandomForest, SVM_Linear,
-           SVM_Radial, AdaBoost, NeuralNetwork, ModelAveragedNeuralNet")
+           AdaBoost, NeuralNetwork, ModelAveragedNeuralNet")
     }
   }
 
@@ -76,14 +76,14 @@ trainClassifiers <- function(trainData, k, repNum, rand.seed=NULL, models="all",
   for(mm in  metModels){
     trainData <- holdData
 
-    if(endsWith(mm, "_M5")){
-      mCols <-c("GaussianSimilarity_mean", "PeakSignificance_mean", "Sharpness_mean", "TPASR_mean", "ZigZag_mean")
+    if(endsWith(mm, "_M4")){
+      mCols <-c("GaussianSimilarity_mean", "Sharpness_mean", "TPASR_mean", "ZigZag_mean")
     }else if(endsWith(mm, "_M7")){
       mCols <- c("ApexBoundaryRatio_mean", "ElutionShift_mean", "FWHM2Base_mean", "Jaggedness_mean", "Modality_mean",
                  "RetentionTimeCorrelation_mean", "Symmetry_mean")
     }else{
       mCols <- c("ApexBoundaryRatio_mean", "ElutionShift_mean", "FWHM2Base_mean", "Jaggedness_mean", "Modality_mean",
-                 "RetentionTimeCorrelation_mean", "Symmetry_mean", "GaussianSimilarity_mean", "PeakSignificance_mean",
+                 "RetentionTimeCorrelation_mean", "Symmetry_mean", "GaussianSimilarity_mean",
                  "Sharpness_mean", "TPASR_mean", "ZigZag_mean")
     }
 
@@ -171,20 +171,6 @@ trainClassifiers <- function(trainData, k, repNum, rand.seed=NULL, models="all",
                           #tuneGrid = tunegrid,
                           control=list(maxit=1000))
       modelList[[m_idx]] <- list(lsvm_model, mm)
-    }
-
-    # SVM Radial Kernel
-    if(startsWith(mm, "SVM_Radial")){
-      if(!is.null(rand.seed)){
-        set.seed(seed)
-      }
-      rsvm_model <- train(x=trainData[,-classIdx],
-                          y=trainData$Class,
-                          method = "svmRadial",
-                          trControl = trControl,
-                          metric = metric,
-                          control=list(maxit=1000))
-      modelList[[m_idx]] <- list(rsvm_model, mm)
     }
 
     # AdaBoost

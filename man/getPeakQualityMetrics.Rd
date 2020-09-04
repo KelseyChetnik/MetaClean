@@ -24,7 +24,7 @@ Wrapper function for calculating the each of the 12 peak quality metrics for eac
 }
 \examples{
 # # calculate peak quality metrics for development dataset
-\dontrun{pqMetrics_development <- getPeakQualityMetrics(eicEvalData = eicEval_development,
+\donttest{pqMetrics_development <- getPeakQualityMetrics(eicEvalData = eicEval_development,
 eicLabels_df = eicLabels_development)}
 
 }

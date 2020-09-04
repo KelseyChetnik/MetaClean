@@ -4,7 +4,14 @@
 \alias{trainClassifiers}
 \title{Train Classifiers on Peak Quality Metric Feature Sets}
 \usage{
-trainClassifiers(trainData, k, repNum, rand.seed = NULL, models = "all")
+trainClassifiers(
+  trainData,
+  k,
+  repNum,
+  rand.seed = NULL,
+  models = "all",
+  metricSet = "M11"
+)
 }
 \arguments{
 \item{trainData}{dataframe. Rows should correspond to peaks, columns should include peak quality metrics and class labels only.}
@@ -15,19 +22,22 @@ trainClassifiers(trainData, k, repNum, rand.seed = NULL, models = "all")
 
 \item{rand.seed}{integer. State in which to set the random number generator}
 
-\item{models}{character string or vector. Specifies the classification algorithms to be trained from the nine available:
-DecisionTree, LogisiticRegression, NaiveBayes, RandomForest, SVM_Linear, SVM_Radial, AdaBoost, NeuralNetwork, and
+\item{models}{character string or vector. Specifies the classification algorithms to be trained from the eight available:
+DecisionTree, LogisiticRegression, NaiveBayes, RandomForest, SVM_Linear, AdaBoost, NeuralNetwork, and
 ModelAveragedNeuralNetwork. "all" specifies the use of all models. Default is "all".}
+
+\item{metricSet}{The metric set(s) to be run with the selected model(s). Select from the following: M4, M7, and M11. Use c()
+to select multiple metrics. "all" specifics the use of all metrics. Default is "M11".}
 }
 \value{
-a list of up to 9 trained models
+a list of up to 8 trained models
 }
 \description{
-Wrapper function for training up to 9 classification algorithms using one of the two available metrics sets or both sets combined.
+Wrapper function for training up to 8 classification algorithms using one of the two available metrics sets or both sets combined.
 }
 \examples{
 # train classification algorithms
-\dontrun{models <- trainClassifiers(trainData=pqMetrics_development, k=5, repNum=10,
+\donttest{models <- trainClassifiers(trainData=pqMetrics_development, k=5, repNum=10,
  rand.seed = 453, models="DecisionTree")}
 
 }

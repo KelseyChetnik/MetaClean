@@ -22,6 +22,6 @@ Wrapper function for generating bar plots for each classifiers for each of the s
 }
 \examples{
 # Create a list of bar plots for each evaluation measure
-\dontrun{makeBarPlots(evalMeasuresDF = test_evalMeasures)}
+\donttest{makeBarPlots(evalMeasuresDF = test_evalMeasures)}
 
 }

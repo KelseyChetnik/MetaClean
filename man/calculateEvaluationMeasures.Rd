@@ -20,6 +20,6 @@ Calculate evaluation measures using the predictions generated during cross-valid
 }
 \examples{
 # Calculate Evaluation Measures for test data
-\dontrun{test_evalMeasures <- calculateEvaluationMeasures(pred=test_predictions_class,
+\donttest{test_evalMeasures <- calculateEvaluationMeasures(pred=test_predictions_class,
 pqMetrics_test$Class)}
 }
