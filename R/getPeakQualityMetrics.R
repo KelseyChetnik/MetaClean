@@ -86,10 +86,14 @@ getPeakQualityMetrics <- function(eicEvalData, eicLabels_df, flatness.factor=0.0
 
   # Combine metrics into dataframe
   metrics_df <- cbind.data.frame(eic_abr_mean, eic_elution_mean, eic_f2b_mean, eic_jagged_mean, eic_modality_mean, eic_RTC_mean,
-                                eic_symmetry_mean, eic_gaussian_mean, eic_significance_mean, eic_sharpness_mean, eic_tpasr_mean, eic_zigzag_mean)
+                                eic_symmetry_mean, eic_gaussian_mean, eic_sharpness_mean, eic_tpasr_mean, eic_zigzag_mean)
   colnames(metrics_df) <- c("ApexBoundaryRatio_mean", "ElutionShift_mean", "FWHM2Base_mean", "Jaggedness_mean", "Modality_mean", "RetentionTimeCorrelation_mean",
-                            "Symmetry_mean", "GaussianSimilarity_mean", "PeakSignificance_mean", "Sharpness_mean", "TPASR_mean", "ZigZag_mean")
-  metrics_df <- cbind(EICNo=eicNums, metrics_df, Class=eicLabels_df$Label)
+                            "Symmetry_mean", "GaussianSimilarity_mean", "Sharpness_mean", "TPASR_mean", "ZigZag_mean")
+  if(!missing(eicLabels_df)){
+    metrics_df <- cbind(EICNo=eicNums, metrics_df, Class=eicLabels_df$Label)
+  }else{
+    metrics_df <- cbind(EICNo=eicNums, metrics_df)
+  }
 
   return(metrics_df)
 

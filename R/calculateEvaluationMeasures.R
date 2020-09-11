@@ -47,6 +47,6 @@ calculateEvaluationMeasures <- function(pred, true){
   acc <- Accuracy(y_true = true, y_pred = pred)
 
   measures <- c(gPrec, gRec, gF, bPrec, bRec, bF, acc)
-  names(measures) <- c("PosClass.Precision", "PosClass.Recall", "PosClass.FScore", "NegClass.Precision", "NegClass.Recall", "NegClass.FScore", "Accuracy")
+  names(measures) <- c("Pass_Precision", "Pass_Recall", "Pass_FScore", "Fail_Precision", "Fail_Recall", "Fail_FScore", "Accuracy")
   measures
 }

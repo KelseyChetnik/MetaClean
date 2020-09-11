@@ -1,6 +1,7 @@
-#' Train Classifiers on Peak Quality Metric Feature Sets
+#' Run Cross-Validation for A List of Algoirthms with Peak Quality Metric Feature Sets
 #'
-#' Wrapper function for training up to 8 classification algorithms using one of the two available metrics sets or both sets combined.
+#' Wrapper function for running cross-validation on up to 8 classification algorithms using one or more of the three available
+#' metrics sets.
 #'
 #' @param trainData dataframe. Rows should correspond to peaks, columns should include peak quality metrics and class labels only.
 #' @param k integer. Number of folds to be used in cross-validation
@@ -25,7 +26,7 @@
 #' @export
 
 
-trainClassifiers <- function(trainData, k, repNum, rand.seed=NULL, models="all", metricSet="M11"){
+runCrossValidation <- function(trainData, k, repNum, rand.seed=NULL, models="all", metricSet="M11"){
 
   # remove EICNo column if present
   if("EICNo" %in% colnames(trainData)){
@@ -111,7 +112,8 @@ trainClassifiers <- function(trainData, k, repNum, rand.seed=NULL, models="all",
                         trControl = trControl,
                         metric = metric,
                         control=list(maxit=1000))
-      modelList[[m_idx]] <- list(dt_model, mm)
+      modelList[[m_idx]] <- dt_model
+
     }
 
     # Logistic Regression
@@ -126,7 +128,8 @@ trainClassifiers <- function(trainData, k, repNum, rand.seed=NULL, models="all",
                         metric = metric,
                         family = binomial(),
                         control=list(maxit=1000))
-      modelList[[m_idx]] <- list(lr_model, mm)
+      modelList[[m_idx]] <- lr_model
+
     }
 
     # Naive Bayes
@@ -141,7 +144,8 @@ trainClassifiers <- function(trainData, k, repNum, rand.seed=NULL, models="all",
                                          metric = metric,
                                          trace=FALSE
       ))
-      modelList[[m_idx]] <- list(nb_model, mm)
+      modelList[[m_idx]] <- nb_model
+
     }
 
     # Random Forest
@@ -155,7 +159,8 @@ trainClassifiers <- function(trainData, k, repNum, rand.seed=NULL, models="all",
                                     trControl = trControl,
                                     metric = metric,
                                     control=list(maxit=1000)))
-      modelList[[m_idx]] <- list(rf_model, mm)
+      modelList[[m_idx]] <- rf_model
+
     }
 
     # SVM Linear Kernel
@@ -170,7 +175,8 @@ trainClassifiers <- function(trainData, k, repNum, rand.seed=NULL, models="all",
                           metric = metric,
                           #tuneGrid = tunegrid,
                           control=list(maxit=1000))
-      modelList[[m_idx]] <- list(lsvm_model, mm)
+      modelList[[m_idx]] <- lsvm_model
+
     }
 
     # AdaBoost
@@ -184,7 +190,8 @@ trainClassifiers <- function(trainData, k, repNum, rand.seed=NULL, models="all",
                                       trControl = trControl,
                                       metric = metric,
                                       control=list(maxit=1000)))
-      modelList[[m_idx]] <- list(ada_model, mm)
+      modelList[[m_idx]] <- ada_model
+
     }
 
 
@@ -200,7 +207,8 @@ trainClassifiers <- function(trainData, k, repNum, rand.seed=NULL, models="all",
                                      metric = metric,
                                      control=list(maxit=1000),
                                      trace=FALSE))
-      modelList[[m_idx]] <- list(nn_model, mm)
+      modelList[[m_idx]] <- nn_model
+
     }
 
     # Model Average Neural Network
@@ -215,12 +223,14 @@ trainClassifiers <- function(trainData, k, repNum, rand.seed=NULL, models="all",
                                             metric = metric,
                                             control=list(maxit=1000),
                                             trace=FALSE))
-      modelList[[m_idx]] <- list(avNN_model, mm)
+      modelList[[m_idx]] <- avNN_model
+
     }
 
     m_idx = m_idx + 1
   } # end metric sets loop
 
+  names(modelList) <- metModels
 
   return(modelList)
 

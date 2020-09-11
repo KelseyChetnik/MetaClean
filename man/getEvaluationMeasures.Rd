@@ -14,8 +14,8 @@ getEvaluationMeasures(models, k, repNum)
 \item{repNum}{integer. Number of cross-validation rounds}
 }
 \value{
-A dataframe with the following columns: Model, RepNum, PosClass.FScore, PosClass.Recall, PosClass.Precision,
- NegClass.FScore, NegClass.Recall, NegClass.Precision, Accuracy
+A dataframe with the following columns: Model, RepNum, Pass_FScore, Pass_Recall, Pass_Precision,
+ Fail_FScore, Fail_Recall, Fail_Precision, Accuracy
 }
 \description{
 Calculate evaluation measures using the predictions generated during cross-validation.

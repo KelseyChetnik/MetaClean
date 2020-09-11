@@ -5,8 +5,8 @@
 #' @param models list. A list of trained models, like that returned by trainClassifiers()
 #' @param k integer. Number of folds used in cross-validation
 #' @param repNum integer. Number of cross-validation rounds
-#' @return A dataframe with the following columns: Model, RepNum, PosClass.FScore, PosClass.Recall, PosClass.Precision,
-#'  NegClass.FScore, NegClass.Recall, NegClass.Precision, Accuracy
+#' @return A dataframe with the following columns: Model, RepNum, Pass_FScore, Pass_Recall, Pass_Precision,
+#'  Fail_FScore, Fail_Recall, Fail_Precision, Accuracy
 #'
 #' @examples
 #' # calculate all seven evaluation measures for each model and each round of cross-validation
@@ -19,8 +19,8 @@ getEvaluationMeasures <- function(models, k, repNum){
 
   numModels <- length(models)
 
-  modelList <- lapply(1:numModels, function(i){models[[i]][[1]]})
-  modelNames <- sapply(1:numModels, function(i){models[[i]][[2]]})
+  modelList <- models
+  modelNames <- names(models)
 
   modelSummary_list <- lapply(1:numModels, function(i){
       modelName <- modelNames[i]
