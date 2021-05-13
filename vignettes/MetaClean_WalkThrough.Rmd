@@ -2,7 +2,7 @@
 title: "MetaClean - Walkthrough"
 author: 
 - name: "Kelsey Chetnik"
-  email: "kchetnik73@gmail.com"
+  email: "kelsey.chetnik@gmail.com"
 
 date: "`r BiocStyle::doc_date()`"
 output: 
@@ -15,7 +15,7 @@ vignette: >
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-# library(MetaClean)
+#library(MetaClean)
 
 ```
 
@@ -220,11 +220,11 @@ This matrix serves as the input for the training the classifiers and making pred
 
 # train classification algorithms
 # For 500 peaks and 89 samples takes ~17.5 mins for M11
-# models <- runCrossValidation(trainData=pqm_development, 
-#                              k=5, 
-#                              repNum=10, 
-#                              rand.seed = 512, 
-#                              models="all", 
+# models <- runCrossValidation(trainData=pqm_development,
+#                              k=5,
+#                              repNum=10,
+#                              rand.seed = 512,
+#                              models="all",
 #                              metricSet = c("M4", "M7", "M11"))
 
 
@@ -242,7 +242,7 @@ Once the potential models have been trained, the next step is to evaluate the pe
 ```{r getEvalMeasures}
 
 # calculate all seven evaluation measures for each model and each round of cross-validation
-# evalMeasuresDF <- getEvaluationMeasures(models=models, k=5, repNum=10)
+#evalMeasuresDF <- getEvaluationMeasures(models=models, k=5, repNum=10)
 
 ```
 
@@ -256,16 +256,40 @@ The evaluation measures data frame can be used to assess the performance of each
 
 NOTE: When "All" is selected for emNames, the bar plots are returned in the same order as the names listed in the description.
 
-```{r makeBarPlots}
+```{r getBarPlots}
 
 # generate bar plots for every
-# barPlots <- getBarPlots(evalMeasuresDF, emNames="All")
+#barPlots <- getBarPlots(evalMeasuresDF, emNames="All")
 # 
 # plot(barPlots$M11$Pass_FScore) # Pass_FScore
 # plot(barPlots$M11$Fail_FScore) # Fail_FScore
 # plot(barPlots$M11$Accuracy) # Accuracy
 
 ```
+
+`MetaClean` also provides a wrapper function to easily generate CD plots of the evaluation measures for each model. This is `getCDPlots` which generates CD plots and corresponding rank matrices for each metric set and each user-selected evaluation measures. This function also gives the user the option to compare the best performing model between each metric set. This function takes the following argument: 
+- **evalMeasuresDF**: dataframe with the following columns: Model, RepNum, Pass_FScore, Pass_Recall, Pass_Precision, Fail_FScore, Fail_Recall, Fail_Precision, and Accuracy. The rows of the dataframe will correspond to the results of a particular model and a particular round of cross-validation.
+- **emNames**: list of names of the evaluation measures to visualize. Accepts the following: Pass_FScore, Pass_Recall, Pass_Precision, Fail_FScore, Fail_Recall, Fail_Precision, and Accuracy. Default is "All".
+- **compareBest**: boolean value. If TRUE, determines the best performing model from each metric set and returns InterMetric CD plots and rank matrices for each evaluation measure. Will not work if only a single metric set in data frame. Default: FALSE.
+- **use_abbr**: boolean value. If TRUE, use abbreviated names for models. Default: TRUE.
+
+NOTE: When "All" is selected for emNames, the bar plots are returned in the same order as the names listed in the description.
+
+```{r getCDPlots}
+
+# generate CD plots and rank matrices for Pass FScore, Fail FScore, and Accuracy evaluation measures
+#cdPlots <- getCDPlots(evalMeasuresDF = evalMeasuresDF, emNames = c("Pass_FScore", "Fail_FScore", "Accuracy"), compareBest = T)
+
+#plot(cdPlots$M11$plots$Pass_FScore)
+#plot(cdPlots$M11$plots$Fail_FScore)
+#plot(cdPlots$M11$plots$Accuracy)
+
+#plot(cdPlots$InterMet$plots$Pass_FScore)
+#plot(cdPlots$InterMet$plots$Fail_FScore)
+#plot(cdPlots$InterMet$plots$Accuracy)
+
+```
+
 
 These plots can help the user select the best perfomring classifier for the data. Of course, the user can also employ their own statistical tests on the evalMeasuresDF itself to determine which class
 

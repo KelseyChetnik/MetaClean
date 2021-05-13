@@ -2,11 +2,11 @@
 #'
 #' Wrapper function for generating bar plots for each classifiers for each of the seven evaluation measures.
 #'
-#' @param evalMeasuresDF A dataframe with the following columns: Model, RepNum, PosClass.FScore, PosClass.Recall, PosClass.Precision,
-#' NegClass.FScore, NegClass.Recall, NegClass.Precision, and Accuracy. The rows of the dataframe will correspond to the results of
+#' @param evalMeasuresDF A dataframe with the following columns: Model, RepNum, Pass_FScore, Pass_Recall, Pass_Precision,
+#' Fail_FScore, Fail_Recall, Fail_Precision, and Accuracy. The rows of the dataframe will correspond to the results of
 #' a particular model and a particular round of cross-validation.
-#' @param emNames A list of names of the evaluation measures to visualize. Accepts the following: PosClass.FScore, PosClass.Recall,
-#' PosClass.Precision, NegClass.FScore, NegClass.Recall, NegClass.Precision, and Accuracy. Default is "All".
+#' @param emNames A list of names of the evaluation measures to visualize. Accepts the following: Pass_FScore, Pass_Recall,
+#' Pass_Precision, Fail_FScore, Fail_Recall, Fail_Precision, and Accuracy. Default is "All".
 #' @return A list of up to seven bar plots (one for each evaluation measure).
 #'
 #' @import ggplot2
@@ -16,7 +16,6 @@
 #' \donttest{makeBarPlots(evalMeasuresDF = test_evalMeasures)}
 #'
 #' @export
-
 getBarPlots <- function(evalMeasuresDF, emNames = "All"){
 
   Mean <- Model <- SE <- NULL
